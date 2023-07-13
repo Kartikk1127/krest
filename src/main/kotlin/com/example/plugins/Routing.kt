@@ -1,13 +1,16 @@
 package com.example.plugins
 
 import com.example.dagger.components.DaggerUserHandlerComponent
+import com.example.handlers.UserHandler
 import com.example.models.User
 import io.ktor.server.routing.*
 import io.ktor.server.response.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 
-fun Application.configureRouting() {
+fun Application.configureRouting(
+    userHandler: UserHandler
+) {
 
 
     val users = mutableListOf<User>()
@@ -24,8 +27,7 @@ fun Application.configureRouting() {
         }
 
         get("/users"){
-            val handler = DaggerUserHandlerComponent.create().getUserHandlerComponent()
-            handler.createUser(User(id = 1, username = "Kartik"))
+            userHandler.createUser(User(id = 1, username = "Kartik"))
             call.respond(users)
         }
     }
